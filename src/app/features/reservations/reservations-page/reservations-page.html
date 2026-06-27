@@ -1,0 +1,135 @@
+<main class="reservations-shell">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Dashboard</a>
+      <span class="eyebrow">Etapa 5</span>
+      <h1>Reservas</h1>
+      <p>Crea reservas sobre canchas existentes y consulta estados, descuentos y total calculado por el backend.</p>
+    </div>
+    <button class="ghost-button" type="button" (click)="loadData()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Actualizando...' : 'Actualizar datos' }}
+    </button>
+  </header>
+
+  <section class="content-grid">
+    <form class="reservation-form" [formGroup]="reservationForm" (ngSubmit)="createReservation()">
+      <h2>Nueva reserva</h2>
+
+      @if (currentUser(); as user) {
+        <div class="user-card">
+          <span>Cliente</span>
+          <strong>{{ user.name }}</strong>
+          <small>{{ user.customerType }}</small>
+        </div>
+      }
+
+      <label>
+        Cancha
+        <select formControlName="courtId">
+          @for (court of courts(); track court.courtId) {
+            <option [value]="court.courtId">{{ court.name }} - {{ court.sportType }}</option>
+          }
+        </select>
+        @if (getFieldError('courtId'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      <div class="two-columns">
+        <label>
+          Fecha
+          <input type="date" formControlName="date" [min]="today" />
+          @if (getFieldError('date'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+
+        <label>
+          Hora inicio
+          <input type="time" formControlName="startTime" />
+          @if (getFieldError('startTime'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+      </div>
+
+      <label>
+        Duracion en horas
+        <input type="number" formControlName="durationHours" min="1" max="8" />
+        @if (getFieldError('durationHours'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      @if (hasPastDate()) {
+        <p class="field-error">La fecha no puede estar en el pasado.</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="form-success">{{ successMessage() }}</p>
+      }
+
+      <button class="primary-button" type="submit" [disabled]="isSubmitting() || courts().length === 0">
+        {{ isSubmitting() ? 'Creando...' : 'Crear reserva' }}
+      </button>
+    </form>
+
+    <section class="reservation-list" aria-label="Listado de reservas">
+      <div class="list-heading">
+        <h2>Reservas registradas</h2>
+        <span>{{ reservations().length }} total</span>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Cargando reservas...</p>
+      } @else if (sortedReservations().length === 0) {
+        <p class="empty-state">No hay reservas registradas.</p>
+      } @else {
+        <div class="reservation-cards">
+          @for (reservation of sortedReservations(); track reservation.reservationId) {
+            <article class="reservation-card" [class.waitlisted]="reservation.status === 'WAITLISTED'" [class.cancelled]="reservation.status === 'CANCELLED'">
+              <div class="card-heading">
+                <div>
+                  <h3>{{ reservation.courtName }}</h3>
+                  <p>{{ reservation.customerName }} · {{ reservation.customerType }}</p>
+                </div>
+                <span class="status-pill">{{ reservation.status }}</span>
+              </div>
+
+              <dl>
+                <div>
+                  <dt>Fecha</dt>
+                  <dd>{{ reservation.date }}</dd>
+                </div>
+                <div>
+                  <dt>Horario</dt>
+                  <dd>{{ reservation.startTime }} - {{ reservation.endTime }}</dd>
+                </div>
+                <div>
+                  <dt>Duracion</dt>
+                  <dd>{{ reservation.durationHours }} h</dd>
+                </div>
+                <div>
+                  <dt>Base</dt>
+                  <dd>{{ reservation.baseAmount | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
+                </div>
+                <div>
+                  <dt>Descuento</dt>
+                  <dd>{{ reservation.totalDiscount | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
+                </div>
+                <div class="total-row">
+                  <dt>Total</dt>
+                  <dd>{{ reservation.totalAmount | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
+                </div>
+              </dl>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </section>
+</main>

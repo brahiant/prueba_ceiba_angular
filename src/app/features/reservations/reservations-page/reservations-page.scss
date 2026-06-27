@@ -1,0 +1,280 @@
+.reservations-shell {
+  background:
+    radial-gradient(circle at 12% 16%, rgba(251, 146, 60, 0.18), transparent 24rem),
+    linear-gradient(180deg, #fff7ed 0%, #f8fafc 100%);
+  color: #0f172a;
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.page-header {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0 auto 1.5rem;
+  max-width: 82rem;
+}
+
+.back-link,
+.eyebrow {
+  color: #c2410c;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.back-link {
+  display: inline-block;
+  letter-spacing: 0;
+  margin-bottom: 1rem;
+  text-transform: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: -0.07em;
+  line-height: 0.92;
+  margin: 0.35rem 0 0.75rem;
+}
+
+.page-header p {
+  color: #57534e;
+  line-height: 1.7;
+  max-width: 43rem;
+}
+
+.content-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(19rem, 25rem) minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 82rem;
+}
+
+.reservation-form,
+.reservation-list {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 1.5rem;
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.09);
+}
+
+.reservation-form {
+  align-self: start;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.user-card {
+  background: #0f172a;
+  border-radius: 1rem;
+  color: #f8fafc;
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem;
+}
+
+.user-card span,
+.user-card small {
+  color: #fed7aa;
+  font-weight: 800;
+}
+
+label {
+  display: grid;
+  gap: 0.45rem;
+  font-weight: 850;
+}
+
+input,
+select {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.85rem;
+  color: #0f172a;
+  font: inherit;
+  padding: 0.8rem 0.9rem;
+}
+
+input:focus,
+select:focus {
+  border-color: #ea580c;
+  outline: 3px solid rgba(234, 88, 12, 0.16);
+}
+
+.two-columns {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.primary-button,
+.ghost-button {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  padding: 0.9rem 1.15rem;
+}
+
+.primary-button {
+  background: #ea580c;
+  color: #ffffff;
+}
+
+.ghost-button {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.field-error,
+.form-error {
+  color: #b91c1c;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.form-error,
+.form-success {
+  border-radius: 0.85rem;
+  padding: 0.8rem;
+}
+
+.form-error {
+  background: #fee2e2;
+}
+
+.form-success {
+  background: #ffedd5;
+  color: #9a3412;
+  font-weight: 800;
+}
+
+.reservation-list {
+  padding: 1.25rem;
+}
+
+.list-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.list-heading span {
+  background: #ffedd5;
+  border-radius: 999px;
+  color: #9a3412;
+  font-weight: 900;
+  padding: 0.45rem 0.75rem;
+}
+
+.reservation-cards {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+}
+
+.reservation-card {
+  background: #1c1917;
+  border-radius: 1.15rem;
+  color: #fff7ed;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.reservation-card.waitlisted {
+  background: #422006;
+}
+
+.reservation-card.cancelled {
+  background: #334155;
+}
+
+.card-heading {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.card-heading p {
+  color: #fed7aa;
+  margin-top: 0.35rem;
+}
+
+.status-pill {
+  background: rgba(251, 146, 60, 0.18);
+  border: 1px solid rgba(253, 186, 116, 0.3);
+  border-radius: 999px;
+  color: #fed7aa;
+  font-size: 0.75rem;
+  font-weight: 900;
+  padding: 0.35rem 0.6rem;
+}
+
+dl {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+dl div {
+  display: flex;
+  justify-content: space-between;
+}
+
+dt {
+  color: #d6d3d1;
+}
+
+dd {
+  font-weight: 850;
+  margin: 0;
+  text-align: right;
+}
+
+.total-row {
+  border-top: 1px solid rgba(253, 186, 116, 0.24);
+  padding-top: 0.65rem;
+}
+
+.empty-state {
+  background: #fff7ed;
+  border: 1px dashed #fdba74;
+  border-radius: 1rem;
+  color: #9a3412;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+@media (max-width: 880px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .content-grid,
+  .two-columns {
+    grid-template-columns: 1fr;
+  }
+}

@@ -19,6 +19,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/courts/courts-page/courts-page').then((m) => m.CourtsPage),
   },
   {
+    path: 'reservations',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/reservations/reservations-page/reservations-page').then((m) => m.ReservationsPage),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
