@@ -7,6 +7,7 @@
         Sesion protegida con JWT activa para consumir endpoints privados del backend Spring Boot.
       </p>
       <div class="hero-actions">
+        <a class="primary-action" href="#/courts">Gestionar canchas</a>
         <button class="primary-action" type="button" (click)="logout()">Cerrar sesion</button>
         <a class="secondary-action" href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noreferrer">
           Swagger local
@@ -24,6 +25,7 @@
           <li>{{ user.role }}</li>
         }
         <li>Bearer Token configurado</li>
+        <li>Canchas listas para operar</li>
       </ul>
     </div>
   </section>

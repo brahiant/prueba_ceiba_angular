@@ -1,0 +1,133 @@
+<main class="courts-shell">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Dashboard</a>
+      <span class="eyebrow">Etapa 4</span>
+      <h1>Canchas</h1>
+      <p>Consulta las canchas disponibles y registra nuevos espacios deportivos contra el backend protegido.</p>
+    </div>
+    <button class="ghost-button" type="button" (click)="loadCourts()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Actualizando...' : 'Actualizar listado' }}
+    </button>
+  </header>
+
+  <section class="content-grid">
+    <form class="court-form" [formGroup]="courtForm" (ngSubmit)="createCourt()">
+      <h2>Registrar cancha</h2>
+
+      <label>
+        Nombre
+        <input type="text" formControlName="name" placeholder="Cancha norte" />
+        @if (getFieldError('name'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      <label>
+        Tipo de deporte
+        <select formControlName="sportType">
+          @for (sportType of sportTypes; track sportType) {
+            <option [value]="sportType">{{ sportType }}</option>
+          }
+        </select>
+        @if (getFieldError('sportType'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      <div class="two-columns">
+        <label>
+          Capacidad
+          <input type="number" formControlName="capacity" min="1" max="50" />
+          @if (getFieldError('capacity'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+
+        <label>
+          Tarifa por hora
+          <input type="number" formControlName="hourlyRate" min="5" step="0.01" />
+          @if (getFieldError('hourlyRate'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+      </div>
+
+      <div class="two-columns">
+        <label>
+          Apertura
+          <input type="time" formControlName="openingTime" />
+          @if (getFieldError('openingTime'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+
+        <label>
+          Cierre
+          <input type="time" formControlName="closingTime" />
+          @if (getFieldError('closingTime'); as error) {
+            <span class="field-error">{{ error }}</span>
+          }
+        </label>
+      </div>
+
+      @if (!hasValidSchedule()) {
+        <p class="field-error">La hora de cierre debe ser posterior a la hora de apertura.</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="form-success">{{ successMessage() }}</p>
+      }
+
+      <button class="primary-button" type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Registrando...' : 'Registrar cancha' }}
+      </button>
+    </form>
+
+    <section class="court-list" aria-label="Listado de canchas">
+      <div class="list-heading">
+        <h2>Canchas registradas</h2>
+        <span>{{ courts().length }} total</span>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Cargando canchas...</p>
+      } @else if (courts().length === 0) {
+        <p class="empty-state">No hay canchas registradas.</p>
+      } @else {
+        <div class="court-cards">
+          @for (court of courts(); track court.courtId) {
+            <article class="court-card">
+              <div>
+                <h3>{{ court.name }}</h3>
+                <span class="sport-pill">{{ court.sportType }}</span>
+              </div>
+              <dl>
+                <div>
+                  <dt>Capacidad</dt>
+                  <dd>{{ court.capacity }}</dd>
+                </div>
+                <div>
+                  <dt>Horario</dt>
+                  <dd>{{ court.openingTime }} - {{ court.closingTime }}</dd>
+                </div>
+                <div>
+                  <dt>Tarifa</dt>
+                  <dd>{{ court.hourlyRate | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
+                </div>
+                <div>
+                  <dt>Estado</dt>
+                  <dd>{{ court.active ? 'Activa' : 'Inactiva' }}</dd>
+                </div>
+              </dl>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </section>
+</main>

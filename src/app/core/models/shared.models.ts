@@ -11,5 +11,8 @@ export type UserRole = 'ADMIN' | 'USER';
 export interface ApiErrorResponse {
   status: number;
   message: string;
+  error?: string;
+  path?: string;
+  validationErrors?: Record<string, string>;
   errors?: Record<string, string>;
 }
