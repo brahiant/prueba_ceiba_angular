@@ -1,0 +1,107 @@
+<main class="reports-shell">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Dashboard</a>
+      <span class="eyebrow">Etapa 7</span>
+      <h1>Reportes</h1>
+      <p>Consulta utilizacion, ingresos y ocupacion por cancha en un rango de fechas.</p>
+    </div>
+  </header>
+
+  <section class="report-panel">
+    <form class="filters" [formGroup]="reportForm" (ngSubmit)="loadReport()">
+      <label>
+        Desde
+        <input type="date" formControlName="from" />
+        @if (getFieldError('from'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      <label>
+        Hasta
+        <input type="date" formControlName="to" />
+        @if (getFieldError('to'); as error) {
+          <span class="field-error">{{ error }}</span>
+        }
+      </label>
+
+      <button class="primary-button" type="submit" [disabled]="isLoading()">
+        {{ isLoading() ? 'Generando...' : 'Generar reporte' }}
+      </button>
+    </form>
+
+    @if (hasInvalidRange()) {
+      <p class="form-error">La fecha inicial no puede ser posterior a la fecha final.</p>
+    }
+
+    @if (errorMessage()) {
+      <p class="form-error">{{ errorMessage() }}</p>
+    }
+
+    @if (report(); as currentReport) {
+      <section class="summary-grid" aria-label="Resumen de reporte">
+        <article>
+          <span>Reservas</span>
+          <strong>{{ totals().totalReservations }}</strong>
+        </article>
+        <article>
+          <span>Horas reservadas</span>
+          <strong>{{ totals().reservedHours | number: '1.0-0' }}</strong>
+        </article>
+        <article>
+          <span>Horas disponibles</span>
+          <strong>{{ totals().availableHours | number: '1.0-0' }}</strong>
+        </article>
+        <article>
+          <span>Ingresos</span>
+          <strong>{{ totals().totalIncome | currency: 'COP':'symbol-narrow':'1.0-0' }}</strong>
+        </article>
+        <article>
+          <span>Ocupacion</span>
+          <strong>{{ totals().occupancyRate | percent: '1.1-1' }}</strong>
+        </article>
+      </section>
+
+      <section class="table-card">
+        <div class="table-heading">
+          <h2>Utilizacion por cancha</h2>
+          <span>{{ currentReport.from }} - {{ currentReport.to }}</span>
+        </div>
+
+        @if (currentReport.rows.length === 0) {
+          <p class="empty-state">No hay canchas para el rango seleccionado.</p>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cancha</th>
+                  <th>Reservas</th>
+                  <th>Horas reservadas</th>
+                  <th>Horas disponibles</th>
+                  <th>Ingresos</th>
+                  <th>Ocupacion</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of currentReport.rows; track row.courtId) {
+                  <tr>
+                    <td>{{ row.courtName }}</td>
+                    <td>{{ row.totalReservations }}</td>
+                    <td>{{ row.reservedHours | number: '1.0-0' }}</td>
+                    <td>{{ row.availableHours | number: '1.0-0' }}</td>
+                    <td>{{ row.totalIncome | currency: 'COP':'symbol-narrow':'1.0-0' }}</td>
+                    <td>{{ row.occupancyRate | percent: '1.1-1' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    } @else if (isLoading()) {
+      <p class="empty-state">Generando reporte...</p>
+    }
+  </section>
+</main>
