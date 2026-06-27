@@ -55,7 +55,10 @@ p {
 
 .primary-action,
 .secondary-action {
+  border: 0;
   border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
   font-weight: 800;
   padding: 0.9rem 1.25rem;
   text-decoration: none;

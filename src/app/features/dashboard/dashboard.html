@@ -4,11 +4,10 @@
       <span class="eyebrow">Deportal</span>
       <h1>Gestion de reservas deportivas</h1>
       <p>
-        Frontend Angular moderno preparado para autenticacion JWT, formularios,
-        reservas, reportes y ejecucion local contra Spring Boot.
+        Sesion protegida con JWT activa para consumir endpoints privados del backend Spring Boot.
       </p>
       <div class="hero-actions">
-        <a class="primary-action" href="#/dashboard">Panel local</a>
+        <button class="primary-action" type="button" (click)="logout()">Cerrar sesion</button>
         <a class="secondary-action" href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noreferrer">
           Swagger local
         </a>
@@ -16,12 +15,15 @@
     </div>
 
     <div class="status-panel" aria-label="Estado de etapa">
-      <h2>Etapa 1</h2>
+      <h2>Etapa 3</h2>
       <ul>
-        <li>Angular latest instalado</li>
-        <li>Hash routing activo</li>
-        <li>Config local externa</li>
-        <li>Listo para conectar API</li>
+        @if (currentUser(); as user) {
+          <li>{{ user.name }}</li>
+          <li>{{ user.email }}</li>
+          <li>{{ user.customerType }}</li>
+          <li>{{ user.role }}</li>
+        }
+        <li>Bearer Token configurado</li>
       </ul>
     </div>
   </section>

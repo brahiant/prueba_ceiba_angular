@@ -1,0 +1,31 @@
+<main class="auth-shell">
+  <section class="auth-card">
+    <div class="auth-copy">
+      <span class="eyebrow">Deportal</span>
+      <h1>Ingreso operativo</h1>
+      <p>Autenticate con JWT para administrar canchas, reservas y reportes desde el frontend local.</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="submit()">
+      <label>
+        Email
+        <input name="email" type="email" required [(ngModel)]="form.email" autocomplete="email" />
+      </label>
+
+      <label>
+        Password
+        <input name="password" type="password" required [(ngModel)]="form.password" autocomplete="current-password" />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+
+      <a routerLink="/register">Crear una cuenta</a>
+    </form>
+  </section>
+</main>

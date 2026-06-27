@@ -1,0 +1,45 @@
+<main class="auth-shell">
+  <section class="auth-card">
+    <div class="auth-copy">
+      <span class="eyebrow">Nuevo usuario</span>
+      <h1>Registro Deportal</h1>
+      <p>Crea una sesion local para reservar canchas y consumir endpoints protegidos con Bearer Token.</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="submit()">
+      <label>
+        Nombre
+        <input name="name" type="text" required [(ngModel)]="form.name" autocomplete="name" />
+      </label>
+
+      <label>
+        Email
+        <input name="email" type="email" required [(ngModel)]="form.email" autocomplete="email" />
+      </label>
+
+      <label>
+        Password
+        <input name="password" type="password" required minlength="8" [(ngModel)]="form.password" autocomplete="new-password" />
+      </label>
+
+      <label>
+        Tipo de cliente
+        <select name="customerType" required [(ngModel)]="form.customerType">
+          @for (customerType of customerTypes; track customerType) {
+            <option [value]="customerType">{{ customerType }}</option>
+          }
+        </select>
+      </label>
+
+      @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Registrando...' : 'Crear cuenta' }}
+      </button>
+
+      <a routerLink="/login">Ya tengo cuenta</a>
+    </form>
+  </section>
+</main>
