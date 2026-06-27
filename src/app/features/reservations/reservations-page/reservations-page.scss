@@ -258,6 +258,21 @@ dd {
   padding-top: 0.65rem;
 }
 
+.refund-row {
+  color: #86efac;
+}
+
+.cancel-button {
+  background: rgba(254, 226, 226, 0.98);
+  border: 0;
+  border-radius: 999px;
+  color: #991b1b;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  padding: 0.8rem 1rem;
+}
+
 .empty-state {
   background: #fff7ed;
   border: 1px dashed #fdba74;

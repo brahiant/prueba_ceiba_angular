@@ -2,9 +2,9 @@
   <header class="page-header">
     <div>
       <a routerLink="/dashboard" class="back-link">← Dashboard</a>
-      <span class="eyebrow">Etapa 5</span>
+      <span class="eyebrow">Etapa 6</span>
       <h1>Reservas</h1>
-      <p>Crea reservas sobre canchas existentes y consulta estados, descuentos y total calculado por el backend.</p>
+      <p>Crea reservas, consulta estados y cancela reservas futuras con reembolso calculado por el backend.</p>
     </div>
     <button class="ghost-button" type="button" (click)="loadData()" [disabled]="isLoading()">
       {{ isLoading() ? 'Actualizando...' : 'Actualizar datos' }}
@@ -73,6 +73,10 @@
         <p class="form-success">{{ successMessage() }}</p>
       }
 
+      @if (cancellationMessage()) {
+        <p class="form-success">{{ cancellationMessage() }}</p>
+      }
+
       <button class="primary-button" type="submit" [disabled]="isSubmitting() || courts().length === 0">
         {{ isSubmitting() ? 'Creando...' : 'Crear reserva' }}
       </button>
@@ -125,7 +129,19 @@
                   <dt>Total</dt>
                   <dd>{{ reservation.totalAmount | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
                 </div>
+                @if (reservation.refundAmount !== null) {
+                  <div class="refund-row">
+                    <dt>Reembolso</dt>
+                    <dd>{{ reservation.refundAmount | currency: 'COP':'symbol-narrow':'1.0-0' }}</dd>
+                  </div>
+                }
               </dl>
+
+              @if (canCancel(reservation)) {
+                <button class="cancel-button" type="button" (click)="cancelReservation(reservation)" [disabled]="cancellingReservationId() === reservation.reservationId">
+                  {{ cancellingReservationId() === reservation.reservationId ? 'Cancelando...' : 'Cancelar reserva' }}
+                </button>
+              }
             </article>
           }
         </div>

@@ -29,8 +29,10 @@ export class ReservationsPage {
   readonly reservations = signal<ReservationResponse[]>([]);
   readonly isLoading = signal(false);
   readonly isSubmitting = signal(false);
+  readonly cancellingReservationId = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
   readonly errorMessage = signal<string | null>(null);
+  readonly cancellationMessage = signal<string | null>(null);
   readonly backendErrors = signal<Record<string, string>>({});
   readonly today = this.toDateInputValue(new Date());
   readonly defaultReservationDate = this.toDateInputValue(this.addDays(new Date(), 1));
@@ -76,6 +78,7 @@ export class ReservationsPage {
   createReservation(): void {
     this.successMessage.set(null);
     this.errorMessage.set(null);
+    this.cancellationMessage.set(null);
     this.backendErrors.set({});
 
     if (this.reservationForm.invalid || this.hasPastDate()) {
@@ -104,6 +107,38 @@ export class ReservationsPage {
           });
         },
         error: (error: HttpErrorResponse) => this.handleCreateError(error),
+      });
+  }
+
+  cancelReservation(reservation: ReservationResponse): void {
+    if (!this.canCancel(reservation) || this.cancellingReservationId()) {
+      return;
+    }
+
+    this.successMessage.set(null);
+    this.errorMessage.set(null);
+    this.cancellationMessage.set(null);
+    this.cancellingReservationId.set(reservation.reservationId);
+
+    this.reservationApi
+      .cancel(reservation.reservationId)
+      .pipe(finalize(() => this.cancellingReservationId.set(null)))
+      .subscribe({
+        next: (response) => {
+          this.reservations.update((reservations) =>
+            reservations.map((item) =>
+              item.reservationId === response.reservationId
+                ? {
+                    ...item,
+                    status: response.status,
+                    refundAmount: response.refundAmount,
+                  }
+                : item,
+            ),
+          );
+          this.cancellationMessage.set(`Reserva cancelada. Reembolso: ${response.refundAmount}.`);
+        },
+        error: (error: HttpErrorResponse) => this.handleCancelError(error),
       });
   }
 
@@ -147,6 +182,14 @@ export class ReservationsPage {
     return court ? `${court.name} (${court.sportType})` : courtId;
   }
 
+  canCancel(reservation: ReservationResponse): boolean {
+    if (reservation.status === 'CANCELLED') {
+      return false;
+    }
+
+    return new Date(`${reservation.date}T${reservation.startTime}`) > new Date();
+  }
+
   private buildRequest(userId: string, customerType: CreateReservationRequest['customerType']): CreateReservationRequest {
     const value = this.reservationForm.getRawValue();
 
@@ -166,6 +209,12 @@ export class ReservationsPage {
 
     this.backendErrors.set(validationErrors);
     this.errorMessage.set(apiError?.message ?? 'No fue posible crear la reserva.');
+  }
+
+  private handleCancelError(error: HttpErrorResponse): void {
+    const apiError = error.error as ApiErrorResponse | null;
+
+    this.errorMessage.set(apiError?.message ?? 'No fue posible cancelar la reserva.');
   }
 
   private toDateInputValue(date: Date): string {
