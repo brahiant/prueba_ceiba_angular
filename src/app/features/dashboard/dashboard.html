@@ -4,7 +4,7 @@
       <span class="eyebrow">Deportal</span>
       <h1>Gestion de reservas deportivas</h1>
       <p>
-        Sesion protegida con JWT activa para consumir endpoints privados del backend Spring Boot.
+        Administra canchas, reservas, cancelaciones y reportes desde una interfaz conectada al backend Spring Boot.
       </p>
       <div class="hero-actions">
         <a class="primary-action" href="#/courts">Gestionar canchas</a>
@@ -17,20 +17,31 @@
       </div>
     </div>
 
-    <div class="status-panel" aria-label="Estado de etapa">
-      <h2>Etapa 3</h2>
-      <ul>
-        @if (currentUser(); as user) {
-          <li>{{ user.name }}</li>
-          <li>{{ user.email }}</li>
-          <li>{{ user.customerType }}</li>
-          <li>{{ user.role }}</li>
-        }
-        <li>Bearer Token configurado</li>
-        <li>Canchas listas para operar</li>
-        <li>Reservas conectadas al backend</li>
-        <li>Reportes de utilizacion activos</li>
-      </ul>
+    <div class="status-panel" aria-label="Resumen de sesion">
+      <span class="panel-kicker">Sesion activa</span>
+      @if (currentUser(); as user) {
+        <h2>{{ user.name }}</h2>
+        <p class="user-email">{{ user.email }}</p>
+        <div class="user-tags">
+          <span>{{ user.customerType }}</span>
+          <span>{{ user.role }}</span>
+        </div>
+      }
+
+      <div class="module-summary">
+        <h3>Modulos disponibles</h3>
+        <ul>
+          <li>Canchas</li>
+          <li>Reservas y cancelaciones</li>
+          <li>Reportes de utilizacion</li>
+          <li>Swagger para pruebas tecnicas</li>
+        </ul>
+      </div>
+
+      <div class="connection-status">
+        <span></span>
+        Backend conectado con JWT
+      </div>
     </div>
   </section>
 </main>
